@@ -3,15 +3,15 @@ import ICON from "../assets/ICON-Logo.png";
 export default function Header(){
     const [active,setActive] = useState("introduce");
     return(
-        <div className="w-screen sm:w-full backdrop-blur-md bg-white/80 sticky top-0 z-50">
+        <div className="backdrop-blur-md bg-white/80 sticky top-0 z-50">
             <div className="w-[95%] mx-auto flex gap-x-2 justify-between items-center">
                 <div className="max-h-12 flex gap-x-2 items-center">
                     <div className="max-w-12 max-h-12">
                         <img src={ICON} alt="Icon-Logo" />
                     </div>
-                    <p className="w-2xl font-bold text-lg text-secondary-color">ICON CLUB</p>
+                    <p className="w-2xl font-bold text-lg text-accent-light">ICON CLUB</p>
                 </div>
-                <button className="text-right font-medium cursor-pointer bg-accent-color! text-dominant-color py-1 px-4 rounded-2xl">
+                <button className="text-right font-medium cursor-pointer bg-accent-light! text-dominant-color py-1 px-4 rounded-2xl hover:scale-105 hover:bg-accent-light/85! active:bg-accent-light!">
                     Sign In
                 </button>
                 {/*<div className="flex justify-center items-center gap-x-4 w-full">

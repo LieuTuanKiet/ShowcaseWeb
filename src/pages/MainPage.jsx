@@ -3,7 +3,7 @@ import Showcase from "../components/Showcase";
 
 export default function MainPage(){
     return(
-        <div className="bg-gray-100/90">
+        <div className="font-roboto">
             <Header/>
             <Showcase/>
         </div>
