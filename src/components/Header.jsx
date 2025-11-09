@@ -64,7 +64,6 @@ export default function Header({sId,setSId}){
                         <GoogleLogin 
                             onSuccess={async(credentialResponse) => {
                                 try{
-                                    console.log(credentialResponse);
                                     const res = await axios.post("http://localhost:5001/api/signIn",{token:credentialResponse.credential});
                                     const data = res.data.data;
                                     reload(data.name,data.token,data.picture,data.studentId);
