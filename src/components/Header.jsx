@@ -1,13 +1,13 @@
 import { useState } from "react";
 import ICON from "../assets/ICON-Logo.png";
 import axios from "axios";
-import { GoogleLogin } from '@react-oauth/google';
-export default function Header(){
+import { GoogleLogin, googleLogout } from '@react-oauth/google';
+export default function Header({sId,setSId}){
 
     const [name,setName] = useState(JSON.parse(localStorage.getItem("name"))??"");
     const [token,setToken] = useState(JSON.parse(localStorage.getItem("jwtToken"))??"");
     const [avatar,setAvatar] = useState(JSON.parse(localStorage.getItem("avatar"))??"");
-    const [sId,setSId] = useState(JSON.parse(localStorage.getItem("studentId"))??"");
+    const [displayLogout,setDisplayLogout] = useState(false);
     const reload = (nm,token,avt,sId) => {
         setName(nm);
         setToken(token);
@@ -22,20 +22,39 @@ export default function Header(){
         }, 100);
     }
 
+    const handleLogout = () => {
+        googleLogout();
+        console.log("logout success!")
+        localStorage.removeItem("jwtToken");
+        localStorage.removeItem("name");
+        localStorage.removeItem("avatar");
+        localStorage.removeItem("studentId");
+        setTimeout(function () {
+            window.location.reload();
+        }, 100);
+    }
+
+    const displayLogoutBtn = () => {
+        setDisplayLogout(!displayLogout);
+    }
+
     return(
-        <div className="backdrop-blur-md bg-white/80 sticky top-0 z-50">
-            <div className="w-[95%] mx-auto flex gap-x-2 justify-between items-center">
+        <div className="w-full backdrop-blur-md bg-white/90 sticky top-0 z-50 shadow-sm shadow-accent-light/20">
+            <div className="container mx-auto lg:max-w-[95%] flex gap-x-2 justify-between items-center">
                 <div className="max-h-12 flex gap-x-2 items-center">
                     <div className="max-w-12 max-h-12">
                         <img src={ICON} alt="Icon-Logo" />
                     </div>
-                    <p className="w-2xl font-bold text-lg text-accent-light">ICON CLUB</p>
+                    <p className="w-fit font-bold text-lg text-accent-light">ICON CLUB</p>
                 </div>
                 { token?
-                    <div className="text-secondary-color flex items-center gap-x-2">
-                        <div className="font-semibold">{name}</div>
-                        <div className="max-w-10 max-h-10">
+                    <div onClick={displayLogoutBtn} className="text-secondary-color cursor-pointer flex items-center gap-x-2 max-w-screen">
+                        <div className="font-semibold w-fit text-center">{name}</div>
+                        <div className="max-w-10 max-h-10 group flex flex-col items-center gap-y-2">
                             <img src={avatar} alt="avatar" className="rounded-4xl"/>
+                            <div className={`${displayLogout?"block":"hidden"} bg-white! border border-gray-300 lg:px-4 lg:py-2 mr-24 rounded-sm`}>
+                                <button className={`cursor-pointer hover:bg-gray-300! active:bg-gray-100 text-secondary-color font-semibold w-32 py-1 rounded-sm`} onClick={() => handleLogout()}> Đăng Xuất</button>
+                            </div>
                         </div>
                     </div>
                 :
@@ -49,7 +68,7 @@ export default function Header(){
                         use_fedcm_for_prompt = {true}
                         text = "signin"
                         type="icon"
-                        className="text-right font-medium cursor-pointer bg-accent-light! text-dominant-color py-1 px-4 rounded-2xl hover:scale-105 hover:bg-accent-light/85! active:bg-accent-light!"
+                        className="font-medium cursor-pointer bg-accent-light! text-dominant-color rounded-2xl hover:bg-accent-light/85! active:bg-accent-light!"
                     >
                     </GoogleLogin>
                 }
