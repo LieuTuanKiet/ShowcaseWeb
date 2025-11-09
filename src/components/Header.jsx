@@ -6,11 +6,17 @@ export default function Header(){
 
     const [name,setName] = useState(JSON.parse(localStorage.getItem("name"))??"");
     const [token,setToken] = useState(JSON.parse(localStorage.getItem("jwtToken"))??"");
-    const reload = (nm,token) => {
+    const [avatar,setAvatar] = useState(JSON.parse(localStorage.getItem("avatar"))??"");
+    const [sId,setSId] = useState(JSON.parse(localStorage.getItem("studentId"))??"");
+    const reload = (nm,token,avt,sId) => {
         setName(nm);
         setToken(token);
+        setAvatar(avt);
+        setSId(sId);
         localStorage.setItem("name",JSON.stringify(nm));
         localStorage.setItem("jwtToken", JSON.stringify(token));
+        localStorage.setItem("avatar",JSON.stringify(avt));
+        localStorage.setItem("studentId",JSON.stringify(sId));
         setTimeout(function () {
             window.location.reload();
         }, 100);
@@ -26,13 +32,19 @@ export default function Header(){
                     <p className="w-2xl font-bold text-lg text-accent-light">ICON CLUB</p>
                 </div>
                 { token?
-                    <div className="text-secondary-color">{name}</div>
+                    <div className="text-secondary-color flex items-center gap-x-2">
+                        <div className="font-semibold">{name}</div>
+                        <div className="max-w-10 max-h-10">
+                            <img src={avatar} alt="avatar" className="rounded-4xl"/>
+                        </div>
+                    </div>
                 :
                     <GoogleLogin 
-                        onSuccess={async(codeResponse) => {
-                            console.log(codeResponse);
-                            const res = await axios.post("http://localhost:5001/api/signIn",{token:codeResponse.credential});
-                            reload(res.data.data.name,res.data.data.token);
+                        onSuccess={async(credentialResponse) => {
+                            console.log(credentialResponse);
+                            const res = await axios.post("http://localhost:5001/api/signIn",{token:credentialResponse.credential});
+                            const data = res.data.data;
+                            reload(data.name,data.token,data.picture,data.studentId);
                         }}
                         use_fedcm_for_prompt = {true}
                         text = "signin"

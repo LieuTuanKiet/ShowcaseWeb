@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react"
 import Favorite from "./Favorite";
+import axios from "axios";
 
 export default function Showcase(){
     const [cards,setCards] = useState([])
     useEffect(() => {
-        fetch("https://68ab1247909a5835049dacb3.mockapi.io/test")
-            .then(res => res.json())
-            .then(data => setCards(data))
-            .catch(error => console.log("Error:", error));
+        const fetchData = async() => {
+            try{
+                const res = await axios.get("http://localhost:5001/");
+                console.log(res);
+            } catch(error){
+                console.log("Lỗi xảy ra!", error);
+            }
+        };
+        fetchData();
         }, [])
     return(
         <div>
