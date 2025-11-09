@@ -2,6 +2,8 @@ import { useState } from "react";
 import ICON from "../assets/ICON-Logo.png";
 import axios from "axios";
 import { GoogleLogin, googleLogout } from '@react-oauth/google';
+import {Toaster, toast} from "sonner";
+
 export default function Header({sId,setSId}){
 
     const [name,setName] = useState(JSON.parse(localStorage.getItem("name"))??"");
@@ -58,19 +60,25 @@ export default function Header({sId,setSId}){
                         </div>
                     </div>
                 :
-                    <GoogleLogin 
-                        onSuccess={async(credentialResponse) => {
-                            console.log(credentialResponse);
-                            const res = await axios.post("http://localhost:5001/api/signIn",{token:credentialResponse.credential});
-                            const data = res.data.data;
-                            reload(data.name,data.token,data.picture,data.studentId);
-                        }}
-                        use_fedcm_for_prompt = {true}
-                        text = "signin"
-                        type="icon"
-                        className="font-medium cursor-pointer bg-accent-light! text-dominant-color rounded-2xl hover:bg-accent-light/85! active:bg-accent-light!"
-                    >
-                    </GoogleLogin>
+                    <div>
+                        <GoogleLogin 
+                            onSuccess={async(credentialResponse) => {
+                                try{
+                                    console.log(credentialResponse);
+                                    const res = await axios.post("http://localhost:5001/api/signIn",{token:credentialResponse.credential});
+                                    const data = res.data.data;
+                                    reload(data.name,data.token,data.picture,data.studentId);
+                                } catch(error){
+                                    toast.error("Hãy dùng tài khoản sinh viên để đăng nhập!");
+                                }
+                            }}
+                            use_fedcm_for_prompt = {true}
+                            text = "signin"
+                            type="icon"
+                            className="font-medium cursor-pointer bg-accent-light! text-dominant-color rounded-2xl hover:bg-accent-light/85! active:bg-accent-light!"
+                        >
+                        </GoogleLogin>
+                    </div>
                 }
             </div>
         </div>

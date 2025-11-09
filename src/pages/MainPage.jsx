@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import ScrollToTop from "react-scroll-up";
+import {Toaster, toast} from "sonner";
 
 export default function MainPage(){
     const [sId,setSId] = useState(JSON.parse(localStorage.getItem("studentId"))??"");
@@ -13,6 +14,7 @@ export default function MainPage(){
     },[])
     return(
         <>
+            <Toaster richColors={true}/>
             <div data-aos="fade-up" data-aos-offset="200" data-aos-delay="50" data-aos-duration="1000" data-aos-easing="ease-out" data-aos-mirror="true" data-aos-once="false" className="font-roboto">
                 <Header sId={sId} setSId={setSId}/>
                 <Showcase sId={sId}/>
